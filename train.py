@@ -25,25 +25,8 @@ import random
 import argparse
 from ruamel import yaml
 import os
-os.environ ["CUDA_VISIBLE_DEVICES"] = "1,0,2,3"
-'''
-def init_seeds(seed=0, cuda_deterministic=True):
-    os.environ['PYTHONHASHSEED'] = str(seed)
-    random.seed(seed)  # seed for module random
-    np.random.seed(seed)  # seed for numpy
-    torch.manual_seed(seed)  # seed for PyTorch CPU
-    torch.cuda.manual_seed(seed)  # seed for current PyTorch GPU
-    torch.cuda.manual_seed_all(seed)  # seed for all PyTorch GPUs
-    # Speed-reproducibility tradeoff https://pytorch.org/docs/stable/notes/randomness.html
-    #确保精度和能复现
-    if cuda_deterministic:# slower, more reproducible
-        torch.backends.cudnn.deterministic = True
-        torch.backends.cudnn.benchmark = False
-        torch.backends.cudnn.enabled = False
-    else:  # faster, less reproducible
-        torch.backends.cudnn.deterministic = False
-        torch.backends.cudnn.benchmark = True
-'''                    
+os.environ ["CUDA_VISIBLE_DEVICES"] = "0,1,2,3"
+               
 def init_seeds(seed=0, cuda_deterministic=False):
     random.seed(seed)  # seed for module random
     np.random.seed(seed)  # seed for numpy
@@ -439,16 +422,6 @@ if __name__ == '__main__':
     if args.local_rank==0: 
         args.tps = np.zeros((args.all_subject, cfg[args.dataset][args.cls]['epochs']))
         args.props = np.zeros((args.all_subject, cfg[args.dataset][args.cls]['epochs']))
-    '''
-    if args.dataset == 'ME2': # GTs数目从大到小，方便early stop
-        subject_out_list = [13,12,0,4,15,14,6,17,3,7,18,2,10,11,19,16,5,1,8,9]
-
-    elif args.dataset == 'SAMM_LV':
-        subject_out_list = [18,5,2,7,3,16,4,21,6,15,23,0,17,20,11,14,9,10,1,13,22,25,27,19,8,24,12,28,26]
-   
-  
-    for subject_out in subject_out_list:
-    '''
 
     
     for subject_out in range(args.all_subject):
@@ -462,8 +435,6 @@ if __name__ == '__main__':
         init_seeds(1000, args.deterministic)
        
         trainer = Trainer(args, cfg)
-        '''
-        '''
         trainer.train()
         tmp_tps = np.array(np.sum(args.tps, axis=0))
         tmp_props = np.array(np.sum(args.props, axis=0))
@@ -472,9 +443,7 @@ if __name__ == '__main__':
         print('Precs:{}'.format(tmp_tps/tmp_props))
         torch.cuda.empty_cache()
         
-        
-      
-        
+
     if args.local_rank==0:     
         tps_epochs = np.array(np.sum(args.tps, axis=0))
         props_epochs = np.array(np.sum(args.props, axis=0))
