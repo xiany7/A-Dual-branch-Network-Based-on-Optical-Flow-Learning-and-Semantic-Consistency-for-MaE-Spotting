@@ -1,0 +1,105 @@
+# dataset
+ME2:
+  fps: 30
+  lr: 0.0001
+  gt_json_path: /home/developers/xianyun/Data_zoo/CASME_sq/LOSO_info/
+  micro:
+    distributed: False
+    cuda_deterministic: True
+    epochs: 30
+    gpu_ind: [0,1,2,3]
+    batch_size: 48
+    sample_fps: 30.0
+    clip_length: 32
+    stride: 8
+    max_props_num: 10
+    total: 57
+    neg_pos_ratio: 2.0
+    p: 0.50
+    layer_num: 4
+    resume: 0
+    loss_weight: [5.0,4.0,0.5,30]
+    
+  macro:
+    distributed: False
+    cuda_deterministic: True
+    epochs: 40
+    gpu_ind: [0,1,2,3]
+    batch_size: 32
+    sample_fps: 10.0
+    clip_length: 48
+    stride: 24
+    max_props_num: 15
+    total: 300
+    neg_pos_ratio: 2.0
+    p: 0.50
+    layer_num: 4
+    resume: 0
+    loss_weight: [5.0,4.0,1.0,320]
+    # loss_weight: [5.0,4.0,4.0]  #short_term
+    
+ 
+    
+SAMM_LV:
+  fps: 200
+  lr: 0.0001
+  gt_json_path: /home/developers/xianyun/Data_zoo/SAMM_LV/LOSO_info/
+  micro:
+    distributed: False
+    cuda_deterministic: True
+    epochs: 30
+    gpu_ind: [0,1,2,3]
+    batch_size: 48
+    sample_fps: 40.0
+    clip_length: 32
+    stride: 8
+    max_props_num: 11
+    total: 159
+    neg_pos_ratio: 2.0
+    p: 0.30
+    layer_num: 4
+    resume: 0
+    loss_weight: [6.0,4.0,0.5,30]
+
+  macro:
+    distributed: False
+    cuda_deterministic: True
+    epochs: 40
+    gpu_ind: [0,1,2,3]
+    batch_size: 24
+    sample_fps: 12.0
+    clip_length: 48
+    stride: 24
+    max_props_num: 11
+    total: 343
+    neg_pos_ratio: 2.0
+    p: 0.40
+    layer_num: 4
+    resume: 0
+    loss_weight: [6.0,4.0,0.5,600]
+    # loss_weight: [6.0,4.0,4.0]  # short_term
+
+    
+# model
+model: FESNet
+backbone: flownetsd
+num_class: 2
+multiscale_weights: [1] # [0.02, 0.08, 0.32] # [0.005, 0.01, 0.02, 0.08, 0.32]
+
+# cuda
+no_cuda: False
+
+# train
+crop_size: 128
+workers: 4
+start_epoch: 0
+weight_decay: 0.0001
+piou: 0.5
+log_dir: ../runs/logs/
+
+# eval
+val_epoch: 1
+nms_sigma: 0.5
+output_path: ../output/proposal
+
+
